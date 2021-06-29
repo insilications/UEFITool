@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : UEFITool
 Version  : 21.04.04
-Release  : 9
+Release  : 11
 URL      : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
 Summary  : No detailed summary available
@@ -105,7 +105,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1624954141
+export SOURCE_DATE_EPOCH=1624954866
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -199,12 +199,13 @@ ccache -s || :
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1624954141
+export SOURCE_DATE_EPOCH=1624954866
 rm -rf %{buildroot}
 ## install_macro start
 pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
+sed -i 's/^Path=.*/Path=\/usr\/bin\/UEFITool/' uefitool.desktop
 install -dm 0755 %{buildroot}/usr/share/applications/
 install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
 popd

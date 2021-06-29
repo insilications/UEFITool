@@ -1,6 +1,7 @@
 pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
+sed -i 's/^Path=.*/Path=\/usr\/bin\/UEFITool/' uefitool.desktop
 install -dm 0755 %{buildroot}/usr/share/applications/
 install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
 popd
