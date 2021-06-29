@@ -1,6 +1,8 @@
 pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
+install -dm 0755 %{buildroot}/usr/share/applications/
+install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
 popd
 pushd UEFIExtract
 install -m 755 -p UEFIExtract %{buildroot}/usr/bin/

@@ -5,13 +5,14 @@
 %define keepstatic 1
 Name     : UEFITool
 Version  : 21.04.04
-Release  : 8
+Release  : 9
 URL      : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: UEFITool-bin = %{version}-%{release}
+Requires: UEFITool-data = %{version}-%{release}
 BuildRequires : binutils-dev
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-qmake
@@ -80,9 +81,18 @@ UEFITool is a viewer and editor of firmware images conforming to UEFI Platform I
 %package bin
 Summary: bin components for the UEFITool package.
 Group: Binaries
+Requires: UEFITool-data = %{version}-%{release}
 
 %description bin
 bin components for the UEFITool package.
+
+
+%package data
+Summary: data components for the UEFITool package.
+Group: Data
+
+%description data
+data components for the UEFITool package.
 
 
 %prep
@@ -95,7 +105,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1624953872
+export SOURCE_DATE_EPOCH=1624954141
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -189,12 +199,14 @@ ccache -s || :
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1624953872
+export SOURCE_DATE_EPOCH=1624954141
 rm -rf %{buildroot}
 ## install_macro start
 pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
+install -dm 0755 %{buildroot}/usr/share/applications/
+install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
 popd
 pushd UEFIExtract
 install -m 755 -p UEFIExtract %{buildroot}/usr/bin/
@@ -212,3 +224,7 @@ popd
 /usr/bin/UEFIExtract
 /usr/bin/UEFIFind
 /usr/bin/UEFITool
+
+%files data
+%defattr(-,root,root,-)
+/usr/share/applications/uefitool.desktop
