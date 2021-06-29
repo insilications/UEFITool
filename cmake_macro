@@ -1,13 +1,12 @@
-pushd ../UEFITool
+pushd ../
 qmake uefitool.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-pushd ../UEFIExtract
-cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-Os" -DCMAKE_C_FLAGS="-Os" -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DLIB_INSTALL_DIR=%{_libdir} -DLIB_SUFFIX=64 -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
+pushd ../UEFIPatch
+qmake uefipatch.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-pushd ../UEFIFind
-cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-Os" -DCMAKE_C_FLAGS="-Os" -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DLIB_INSTALL_DIR=%{_libdir} -DLIB_SUFFIX=64 -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
+pushd ../UEFIReplace
+qmake uefireplace.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-

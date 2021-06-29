@@ -1,14 +1,10 @@
-pushd UEFITool
+# pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
-sed -i '/^Path=.*/d' uefitool.desktop
-sed -i 's/uefitool/UEFITool/' uefitool.desktop
-install -dm 0755 %{buildroot}/usr/share/applications/
-install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
+pushd UEFIPatch
+install -m 755 -p UEFIPatch %{buildroot}/usr/bin/
+install -m 755 -p patches*.txt %{buildroot}/usr/bin/
 popd
-pushd UEFIExtract
-install -m 755 -p UEFIExtract %{buildroot}/usr/bin/
-popd
-pushd UEFIFind
-install -m 755 -p UEFIFind %{buildroot}/usr/bin/
+pushd UEFIReplace
+install -m 755 -p UEFIReplace %{buildroot}/usr/bin/
 popd

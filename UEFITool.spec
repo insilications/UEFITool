@@ -4,15 +4,14 @@
 #
 %define keepstatic 1
 Name     : UEFITool
-Version  : 21.04.04
-Release  : 12
-URL      : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
-Source0  : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v21.04.04.tar.gz
+Version  : 0.28.0
+Release  : 13
+URL      : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v0.28.0.tar.gz
+Source0  : file:///aot/build/clearlinux/packages/UEFITool/UEFITool-v0.28.0.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: UEFITool-bin = %{version}-%{release}
-Requires: UEFITool-data = %{version}-%{release}
 BuildRequires : binutils-dev
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-qmake
@@ -75,24 +74,18 @@ BuildRequires : zlib-staticdev
 %define debug_package %{nil}
 
 %description
-# UEFITool
-UEFITool is a viewer and editor of firmware images conforming to UEFI Platform Interface (PI) Specifications.
+UEFITool
+========
+.. image:: https://raw.githubusercontent.com/LongSoft/UEFITool/master/uefitool.ico
+.. image:: https://scan.coverity.com/projects/1812/badge.svg?flat=1
+:target: https://scan.coverity.com/projects/1812/
 
 %package bin
 Summary: bin components for the UEFITool package.
 Group: Binaries
-Requires: UEFITool-data = %{version}-%{release}
 
 %description bin
 bin components for the UEFITool package.
-
-
-%package data
-Summary: data components for the UEFITool package.
-Group: Data
-
-%description data
-data components for the UEFITool package.
 
 
 %prep
@@ -105,7 +98,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1624955249
+export SOURCE_DATE_EPOCH=1624956748
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -177,19 +170,18 @@ export LIBVA_DRIVERS_PATH=/usr/lib64/dri
 export GTK_RC_FILES=/etc/gtk/gtkrc
 export FONTCONFIG_PATH=/usr/share/defaults/fonts
 ## altflags1 end
-pushd ../UEFITool
+pushd ../
 qmake uefitool.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-pushd ../UEFIExtract
-cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-Os" -DCMAKE_C_FLAGS="-Os" -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DLIB_INSTALL_DIR=%{_libdir} -DLIB_SUFFIX=64 -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
+pushd ../UEFIPatch
+qmake uefipatch.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-pushd ../UEFIFind
-cmake -G "Unix Makefiles" -DCMAKE_CXX_FLAGS="-Os" -DCMAKE_C_FLAGS="-Os" -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DLIB_INSTALL_DIR=%{_libdir} -DLIB_SUFFIX=64 -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_INSTALL_SBINDIR=%{_sbindir} -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON .
+pushd ../UEFIReplace
+qmake uefireplace.pro CONFIG+=optimize_size PREFIX=/usr
 make -j16 V=1 VERBOSE=1
 popd
-
 ## make_macro content
 echo Done
 ## make_macro end
@@ -199,22 +191,18 @@ ccache -s || :
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1624955249
+export SOURCE_DATE_EPOCH=1624956748
 rm -rf %{buildroot}
 ## install_macro start
-pushd UEFITool
+# pushd UEFITool
 install -dm 0755 %{buildroot}/usr/bin/
 install -m 755 -p UEFITool %{buildroot}/usr/bin/
-sed -i '/^Path=.*/d' uefitool.desktop
-sed -i 's/uefitool/UEFITool/' uefitool.desktop
-install -dm 0755 %{buildroot}/usr/share/applications/
-install -m 755 -p uefitool.desktop %{buildroot}/usr/share/applications/
+pushd UEFIPatch
+install -m 755 -p UEFIPatch %{buildroot}/usr/bin/
+install -m 755 -p patches*.txt %{buildroot}/usr/bin/
 popd
-pushd UEFIExtract
-install -m 755 -p UEFIExtract %{buildroot}/usr/bin/
-popd
-pushd UEFIFind
-install -m 755 -p UEFIFind %{buildroot}/usr/bin/
+pushd UEFIReplace
+install -m 755 -p UEFIReplace %{buildroot}/usr/bin/
 popd
 ## install_macro end
 
@@ -223,10 +211,8 @@ popd
 
 %files bin
 %defattr(-,root,root,-)
-/usr/bin/UEFIExtract
-/usr/bin/UEFIFind
+/usr/bin/UEFIPatch
+/usr/bin/UEFIReplace
 /usr/bin/UEFITool
-
-%files data
-%defattr(-,root,root,-)
-/usr/share/applications/uefitool.desktop
+/usr/bin/patches-misc.txt
+/usr/bin/patches.txt
