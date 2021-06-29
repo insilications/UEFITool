@@ -1,9 +1,10 @@
 pushd UEFITool
-%make_install
+install -dm 0755 %{buildroot}/usr/bin/
+install -m 755 -p UEFITool %{buildroot}/usr/bin/
 popd
 pushd UEFIExtract
-%make_install
+install -m 755 -p UEFIExtract %{buildroot}/usr/bin/
 popd
 pushd UEFIFind
-%make_install
+install -m 755 -p UEFIFind %{buildroot}/usr/bin/
 popd
