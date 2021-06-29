@@ -1,0 +1,9 @@
+pushd UEFITool
+%make_install
+popd
+pushd UEFIExtract
+%make_install
+popd
+pushd UEFIFind
+%make_install
+popd
